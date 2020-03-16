@@ -64,7 +64,7 @@ Telegram bot for Synology Download Station
       - SYNOHOST는 Synology API 설정에서 지정한 사용자 지정 URL과 포트입니다.
       - SYNID는 위에서 생성한 Synology API 연동 ID입니다.
       - SYNPWD는 위에서 생성한 Synology API 연동 ID의 암호입니다.
-  - 명령에는 /bin/sh /usr/src/app/run.sh 를 입력합니다.
+  - 명령에는 /bin/sh /go/src/run.sh 를 입력합니다.
   - 이렇게 하면 시놀에서 Golang을 실행할 수 있는 환경이 만들어집니다.
 
 ## 테스트
