@@ -11,6 +11,8 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
+var debug bool
+
 func main() {
 
 	botToken := os.Getenv("BOTTOKEN")
@@ -22,6 +24,7 @@ func main() {
 	}
 
 	bot.Debug = false
+	debug = true
 
 	log.Printf("[READY] Authorized on account %s", bot.Self.UserName)
 
@@ -37,11 +40,12 @@ func main() {
 
 		respMsg := parsingBotMessage(bot, update.Message)
 
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, respMsg)
-		msg.ReplyToMessageID = update.Message.MessageID
+		if respMsg != "" {
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, respMsg)
+			msg.ReplyToMessageID = update.Message.MessageID
 
-		bot.Send(msg)
-
+			bot.Send(msg)
+		}
 	}
 }
 
@@ -58,7 +62,27 @@ func parsingBotMessage(bot *tgbotapi.BotAPI, message *tgbotapi.Message) string {
 		return "I am not yours"
 	}
 
-	if message.Document != nil { // torrent file
+	if message.Command() == "debug" {
+
+		if message.CommandArguments() == "on" {
+			debug = true
+		} else if message.CommandArguments() == "off" {
+			debug = false
+		}
+
+		if debug {
+			return "debug mode"
+		}
+
+		return "not debug mode"
+
+	} else if message.Command() == "query" {
+
+		QuerySynoAPI(bot, message.CommandArguments())
+
+		return ""
+
+	} else if message.Document != nil { // torrent file
 
 		if message.Document.MimeType != "application/x-bittorrent" {
 			log.Printf("[WARNING] Is not torrent file [%s]", message.Document.MimeType)
@@ -82,7 +106,7 @@ func parsingBotMessage(bot *tgbotapi.BotAPI, message *tgbotapi.Message) string {
 		//log.Printf("[%s] %s", message.From.UserName, message.Text)
 		err := CreateMagnet(destination, message.Text)
 		if err != nil {
-			log.Printf("[ERROR] Create magnet fail - %s", err)
+			log.Printf("[ERROR] Create magnet fail - %s", string(err.Error()))
 			return "Fail create magent"
 		}
 	}

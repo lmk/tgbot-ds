@@ -1,15 +1,22 @@
 package main
 
 import (
-	"errors"
 	"math/rand"
 )
 
-// SynoError syno api error code to string
-// login and create
-func SynoError(code int) error {
+type synoError struct {
+	Code    int
+	Message string
+}
+
+func (e *synoError) Error() string {
+	return e.Message
+}
+
+// SynoLoginError syno api error code to string
+func SynoLoginError(code int) error {
 	m := map[int]string{
-		// login
+		// common
 		100: "Unknown error",
 		101: "Invalid parameter",
 		102: "The requested API does not exist",
@@ -18,6 +25,28 @@ func SynoError(code int) error {
 		105: "The logged in session does not have permission",
 		106: "Session timeout",
 		107: "Session interrupted by duplicate login",
+		// login
+		400: "No such account or incorrect password",
+		401: "Account disabled",
+		402: "Permission denied",
+		403: "2-step verification code required",
+		404: "Failed to authenticate 2-step verification code",
+	}
+
+	return &synoError{Code: code, Message: m[code]}
+}
+
+// SynoCreateError syno api error code to string
+func SynoCreateError(code int) error {
+	m := map[int]string{
+		// common
+		100: "Unknown error",
+		101: "Invalid parameter",
+		102: "The requested API does not exist",
+		103: "The requested method does not exist",
+		104: "The requested version does not support the functionality",
+		105: "The logged in session does not have permission",
+		106: "Session timeout",
 		// create
 		400: "File upload failed",
 		401: "Max number of tasks reached",
@@ -30,7 +59,7 @@ func SynoError(code int) error {
 		408: "File does not exist",
 	}
 
-	return errors.New(m[code])
+	return &synoError{Code: code, Message: m[code]}
 }
 
 // OkMesssge random ok message
