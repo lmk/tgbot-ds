@@ -2,6 +2,7 @@ package main
 
 import (
 	"math/rand"
+	"time"
 )
 
 type synoError struct {
@@ -74,5 +75,6 @@ func OkMesssge() string {
 		"your taste",
 	}
 
+	rand.Seed(time.Now().UnixNano())
 	return msgs[rand.Intn(len(msgs))]
 }

@@ -88,11 +88,22 @@ Telegram bot for Synology Download Station
 ## 테스트
 
 1. Docker > 컨테이너 메뉴에서 생성한 Golang을 실행해주고, [세부사항] 버튼을 눌러 창을 엽니다.
+
    ![test1.png](images/test1.png)
+
    ![test2.png](images/test2.png)
+
 2. '로그'탭으로 이동해서 로그를 확인합니다. 아래와 같은 로그가 올라오면 준비가 된 것입니다.
+
    ![test3.png](images/test3.png)
+
 3. Telegram에서 봇 에게 Torrent 파일을 전송하거나, magent URI를 메시지로 보내면 Download Station에서 다운이 됩니다.
+
+4. Telegram에서 봇 에게'/query' 명령을 전송하면, 지원하는 SYNO API 정보를 파일로 돌려줍니다. 정상적인 경우 아래와 같이 나옵니다.
+
+```json
+{"data":{"SYNO.API.Auth":{"maxVersion":6,"minVersion":1,"path":"auth.cgi"},"SYNO.DownloadStation.Task":{"maxVersion":3,"minVersion":1,"path":"DownloadStation/task.cgi"}},"success":true}
+```
 
 ## history
 
@@ -103,4 +114,6 @@ Telegram bot for Synology Download Station
     - '/debog on' 로그를 좀 더 상세하게 출력
     - '/debog off' 로그를 원래대로 출력
   - 텔레그램에 query 커맨드 추가
-    - '/query 버전' 로그에 SYNO API 지원 목록 출력 (버전 기본값 '1')
+    - '/query 조회정보' 로그에 SYNO API 지원 목록 출력 (기본값 'SYNO.API.Auth,SYNO.DownloadStation.Task')
+- 2020.03.17
+  - 텔레그램에 query 커맨드의 결과를 텔레그램을 통해 파일로 받을 수 있도록 수정.

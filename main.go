@@ -24,7 +24,7 @@ func main() {
 	}
 
 	bot.Debug = false
-	debug = true
+	debug = false
 
 	log.Printf("[READY] Authorized on account %s", bot.Self.UserName)
 
@@ -78,7 +78,15 @@ func parsingBotMessage(bot *tgbotapi.BotAPI, message *tgbotapi.Message) string {
 
 	} else if message.Command() == "query" {
 
-		QuerySynoAPI(bot, message.CommandArguments())
+		err := QuerySynoAPI(bot, message.CommandArguments())
+		if err == nil {
+			msg := tgbotapi.NewDocumentUpload(message.Chat.ID, "query.json")
+			_, err = bot.Send(msg)
+			if err != nil {
+				log.Printf("[ERROR] fail send document- %s", err)
+				return "Fail Query"
+			}
+		}
 
 		return ""
 

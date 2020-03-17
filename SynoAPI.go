@@ -129,7 +129,7 @@ func CreateMagnet(dst string, uri string) error {
 }
 
 // QuerySynoAPI query
-func QuerySynoAPI(bot *tgbotapi.BotAPI, version string) error {
+func QuerySynoAPI(bot *tgbotapi.BotAPI, query string) error {
 
 	host := os.Getenv("SYNOHOST")
 	synoID := os.Getenv("SYNOID")
@@ -141,8 +141,8 @@ func QuerySynoAPI(bot *tgbotapi.BotAPI, version string) error {
 		log.Printf("[LOGIN] SYNOPWD:[%s]", string(synoPwd))
 	}
 
-	if version == "" {
-		version = "1"
+	if query == "" {
+		query = "SYNO.API.Auth,SYNO.DownloadStation.Task"
 	}
 
 	// query
@@ -151,7 +151,8 @@ func QuerySynoAPI(bot *tgbotapi.BotAPI, version string) error {
 			"api":     {"SYNO.API.Info"},
 			"version": {"1"},
 			"method":  {"query"},
-			"query":   {"all"}})
+			"query":   {query}})
+	//			"query":   {"all"}})
 	if err != nil {
 		return err
 	}
@@ -165,6 +166,18 @@ func QuerySynoAPI(bot *tgbotapi.BotAPI, version string) error {
 
 	if debug {
 		log.Printf("[QUERY] %s", string(byteBody))
+	}
+
+	f, err := os.Create("query.json")
+	if err != nil {
+		log.Printf("[QUERY] Fail Create query.json")
+		return err
+	}
+
+	f.Write(byteBody)
+	if err != nil {
+		log.Printf("[QUERY] Fail Write query.json")
+		return err
 	}
 
 	return nil
