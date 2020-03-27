@@ -47,6 +47,7 @@ func CreateMagnet(dst string, uri string) error {
 	host := os.Getenv("SYNOHOST")
 	synoID := os.Getenv("SYNOID")
 	synoPwd := os.Getenv("SYNOPWD")
+	synoDest := os.Getenv("SYNOPATH")
 
 	if debug {
 		log.Printf("[LOGIN] SYNOHOST:[%s]", string(host))
@@ -96,7 +97,7 @@ func CreateMagnet(dst string, uri string) error {
 			"api":         {"SYNO.DownloadStation.Task"},
 			"version":     {"2"},
 			"method":      {"create"},
-			"destination": {dst},
+			"destination": {synoDest},
 			"uri":         {uri},
 			"_sid":        {loginResult.Sid}})
 

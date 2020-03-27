@@ -78,10 +78,11 @@ Telegram bot for Synology Download Station
      ![run-docker4.png](images/run-docker4.png)
         - BOTTOKEN에는 봇을 생성할때 기록해둔 토큰값을 입력합니다.
         - MYTGNAME에는 봇과 대화할 내 텔레그램 이름입니다.
-        - DESTINATION에는 Download Station에서 감시할 '/watch' 경로입니다.
+        - DESTINATION에는 볼륨에서 마운트한 '/watch' 경로입니다. 앞에 "/"가 있어야 합니다.
         - SYNOHOST는 Synology API 설정에서 지정한 사용자 지정 URL과 포트입니다.
         - SYNID는 위에서 생성한 Synology API 연동 ID입니다.
         - SYNPWD는 위에서 생성한 Synology API 연동 ID의 암호입니다.
+        - SYNOPATH는 Download Station에서 감시할 시놀로지 기준의 경로입니다. 앞에 "/"가 없어야 합니다.
     - 명령에는 /bin/sh /go/src/run.sh 를 입력합니다.
     - 이렇게 하면 시놀에서 Golang을 실행할 수 있는 환경이 만들어집니다.
 
@@ -117,3 +118,5 @@ Telegram bot for Synology Download Station
     - '/query 조회정보' 로그에 SYNO API 지원 목록 출력 (기본값 'SYNO.API.Auth,SYNO.DownloadStation.Task')
 - 2020.03.17
   - 텔레그램에 query 커맨드의 결과를 텔레그램을 통해 파일로 받을 수 있도록 수정.
+- 2020.03.28
+  - SYNOPATH 추가하여 마그넷과 Torrent 파일의 경로를 구분하도록 수정
